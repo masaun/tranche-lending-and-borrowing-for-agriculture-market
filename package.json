@@ -6,7 +6,7 @@
     "test:LimitOrderProtocol": "npx hardhat test ./test/limit-order-protocol/LimitOrderProtocol.js --network hardhat",
     "test-truffle:Something": "truffle test ./test/Something.test.js --network local",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run scripts/deploy.js",
+    "deploy:sample": "npx hardhat run scripts/deployment/sample-deploy.js",
     "deploy:velas_testnet": "npx hardhat run scripts/deploy.js --network velas_testnet",
     "node": "npx hardhat node",
     "scripts/sample-script.js": "node scripts/sample-script.js"
