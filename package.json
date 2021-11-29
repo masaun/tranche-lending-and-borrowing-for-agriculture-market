@@ -1,5 +1,19 @@
 {
-  "name": "hardhat-project",
+  "name": "tranche-lending-for-farmers",
+  "scripts": {
+    "accounts": "npx hardhat accounts --network hardhat",
+    "test": "npx hardhat test --network hardhat",
+    "test:LimitOrderProtocol": "npx hardhat test ./test/limit-order-protocol/LimitOrderProtocol.js --network hardhat",
+    "test-truffle:Something": "truffle test ./test/Something.test.js --network local",
+    "compile": "npx hardhat compile",
+    "deploy:sample": "npx hardhat run scripts/deployment/sample-deploy.js",
+    "deploy:velas_testnet": "npx hardhat run scripts/deploy.js --network velas_testnet",
+    "node": "npx hardhat node",
+    "scripts/sample-script.js": "node scripts/sample-script.js"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
