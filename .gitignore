@@ -7,3 +7,5 @@ yarn.lock
 #Hardhat files
 cache
 artifacts
+
+.DS_Store
