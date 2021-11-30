@@ -16,4 +16,27 @@ contract TranchePool {
         console.log("Test: ", _testMessage);
     }
 
+
+    /**
+     * @dev - Deposit stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
+     * @dev - Generate yield through existing lending protocols (e.g. AAVE, Compound)
+     */
+    function deposit() public {
+        // [Todo]:
+    }
+
+    /**
+     * @dev - Harvest yields that is generated via existing lending protocols (e.g. AAVE, Compound)
+     */ 
+    function harvestYieldGenerated() public {
+        // [Todo]:
+    }
+
+    /**
+     * @dev - Allocate yields generated into each pools of tranches (Senior tranche's pool / Junior tranche's pool)
+     */ 
+    function allocateYieldGenerated() public {
+        // [Todo]:
+    }
+
 }
