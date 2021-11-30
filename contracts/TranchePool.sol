@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity ^0.7.6;
 
 
 /**
@@ -17,7 +17,7 @@ contract TranchePool {
      * @dev - Generate yield through existing lending protocols (e.g. AAVE, Compound)
      */
     function deposit() public {
-        // [Todo]:
+        // [Todo]: AAVE
     }
 
     /**
