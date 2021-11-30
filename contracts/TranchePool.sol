@@ -17,7 +17,7 @@ contract TranchePool {
      * @dev - Generate yield through existing lending protocols (e.g. AAVE, Compound)
      */
     function deposit() public {
-        // [Todo]:
+        // [Todo]: AAVE
     }
 
     /**
