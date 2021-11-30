@@ -5,9 +5,9 @@ pragma solidity ^0.8.0;
 
 
 /**
- * @dev - This is a pool for the Senior Tranche
+ * @dev - This is a smart contract that manage pools of tranches (Pool of Senior Tranche / Junior Tranche)
  */ 
-contract SeniorTranche {
+contract TrancheManager {
 
     constructor(string memory _testMessage) {
         console.log("Test: ", _testMessage);
