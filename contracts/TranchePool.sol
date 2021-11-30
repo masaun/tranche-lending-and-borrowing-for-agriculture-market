@@ -15,6 +15,12 @@ import { JuniorTrancheToken } from "./JuniorTrancheToken.sol";
  */ 
 contract TranchePool {
 
+    // senior BOND tranche (NFT)
+    address public seniorBondTranche; // IBond
+
+    // junior BOND tranche (NFT)
+    address public juniorBondTranche; // IBond
+
     constructor(
         string memory name_,
         string memory symbol_,
