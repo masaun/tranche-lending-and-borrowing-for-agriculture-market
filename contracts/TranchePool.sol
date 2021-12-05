@@ -51,4 +51,11 @@ contract TranchePool {
         // [Todo]:
     }
 
+    /**
+     * @dev - A farmer borrow specified-amount from this pool
+     */
+    function borrow() public {
+        // [Todo]: 
+    }
+
 }
