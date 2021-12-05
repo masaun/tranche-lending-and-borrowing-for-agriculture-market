@@ -3,7 +3,7 @@ pragma solidity ^0.7.6;
 
 
 /**
- * @dev - This is a pool for the Senior Tranche
+ * @dev - This is a pool (Bond) contract for the Senior Tranche
  */ 
 contract SeniorTranche {
 
