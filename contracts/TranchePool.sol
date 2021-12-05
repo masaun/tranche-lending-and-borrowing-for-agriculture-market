@@ -13,7 +13,7 @@ import { JuniorTrancheToken } from "./JuniorTrancheToken.sol";
  * 
  * @dev - This smart contract is integrated with existing Lending Protocols in order to generate yield for allocating into 2 Pools (Senior/Junior).
  */ 
-contract TranchePool {
+contract TranchePool is JuniorTrancheToken {
 
     // senior BOND tranche (NFT)
     address public seniorBondTranche; // IBond
@@ -30,11 +30,12 @@ contract TranchePool {
     }
 
     /**
-     * @dev - Deposit stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
-     * @dev - Generate yield through existing lending protocols (e.g. AAVE, Compound)
+     * @dev - A investor deposit stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
+     * @dev - Yield is generated through existing lending protocols (e.g. AAVE, Compound)
      */
     function deposit() public {
         // [Todo]: AAVE
+
     }
 
     /**
