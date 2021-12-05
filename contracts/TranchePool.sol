@@ -33,9 +33,11 @@ contract TranchePool is JuniorTrancheToken {
      * @dev - A investor deposit stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
      * @dev - Yield is generated through existing lending protocols (e.g. AAVE, Compound)
      */
-    function deposit() public {
-        // [Todo]: AAVE
+    function deposit(uint amount) public {
+        //@notice - In advance, a user must approve "amount" 
+        transferFrom(msg.sender, address(this), amount);
 
+        // [Todo]: AAVE
     }
 
     /**
