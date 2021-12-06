@@ -7,6 +7,8 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { JuniorTrancheToken } from "./JuniorTrancheToken.sol";
 import { BorrowToken } from "./BorrowToken.sol";
 
+import { BondStructs } from "./commons/BondStructs.sol";
+
 import { ILendingPool } from "./yield-sources/aave-v2/ILendingPool.sol";
 
 
@@ -16,7 +18,7 @@ import { ILendingPool } from "./yield-sources/aave-v2/ILendingPool.sol";
  * 
  * @dev - This smart contract is integrated with existing Lending Protocols in order to generate yield for allocating into 2 Pools (Senior/Junior).
  */ 
-contract TranchePool is JuniorTrancheToken {
+contract TranchePool is JuniorTrancheToken, BondStructs {
 
     // senior BOND tranche (NFT)
     address public seniorBondTranche; // IBond
