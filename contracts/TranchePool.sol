@@ -6,6 +6,8 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import { JuniorTrancheToken } from "./JuniorTrancheToken.sol";
 
+import { ILendingPool } from "./yield-sources/aave-v2/ILendingPool.sol";
+
 
 /**
  * @dev - This is a smart contract that manage pools of tranches (Pool of Senior Tranche / Junior Tranche)
@@ -27,24 +29,33 @@ contract TranchePool is JuniorTrancheToken {
     // This is token that represent amount that should be repaid when maturity.
     IERC20 public brToken;
 
+    // AAVE-v2 Lending Pool
+    ILendingPool public lendingPool;
+
+
     constructor(
         string memory name_,
         string memory symbol_,
         uint8 decimals_,
-        IERC20 dai_
+        IERC20 dai_,
+        ILendingPool lendingPool_
     ) JuniorTrancheToken(name_, symbol_, decimals_) {
         dai = dai_;
+        lendingPool = lendingPool_;
     }
 
     /**
      * @dev - A lender deposit (=lend) stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
      * @dev - Yield is generated through existing lending protocols (e.g. AAVE, Compound)
      */
-    function deposit(uint amount) public {
+    function deposit(address asset, uint amount, address onBehalfOf, uint16 referralCode) public {
         //@notice - In advance, a user must approve "amount" 
         transferFrom(msg.sender, address(this), amount);
 
-        // [Todo]: AAVE
+        //@dev - Deposit amount of tokens into AAVE's lending pool
+        address onBehalfOf = address(0);
+        uint16 referralCode = 0;
+        lendingPool.deposit(asset, amount, onBehalfOf, referralCode);
     }
 
     /**
