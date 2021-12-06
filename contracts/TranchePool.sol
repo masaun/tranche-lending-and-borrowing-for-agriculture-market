@@ -23,9 +23,6 @@ contract TranchePool is JuniorTrancheToken {
     // junior BOND tranche (NFT)
     address public juniorBondTranche; // IBond
 
-    // Original token that is accumulated by junior/senior BOND tranche
-    IERC20 public dai;
-
     // This is token that represent amount that should be repaid when maturity.
     IERC20 public brToken;
 
@@ -37,10 +34,8 @@ contract TranchePool is JuniorTrancheToken {
         string memory name_,
         string memory symbol_,
         uint8 decimals_,
-        IERC20 dai_,
         ILendingPool lendingPool_
     ) JuniorTrancheToken(name_, symbol_, decimals_) {
-        dai = dai_;
         lendingPool = lendingPool_;
     }
 
@@ -48,12 +43,12 @@ contract TranchePool is JuniorTrancheToken {
      * @dev - A lender deposit (=lend) stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
      * @dev - Yield is generated through existing lending protocols (e.g. AAVE, Compound)
      */
-    function deposit(uint amount, address onBehalfOf, uint16 referralCode) public {
-        //@dev - asset deposited is DAI, etc
-        address asset = address(dai);
+    function deposit(address asset, uint amount, address onBehalfOf, uint16 referralCode) public {
+        //@dev - Create stablecoin instance (asset deposited are DAI, USDC, USDT, etc
+        IERC20 stablecoin = IERC20(asset);
 
         //@notice - In advance, a user must approve "amount" 
-        dai.transferFrom(msg.sender, address(this), amount);
+        stablecoin.transferFrom(msg.sender, address(this), amount);
 
         //@dev - Deposit amount of tokens into AAVE's lending pool
         address onBehalfOf = address(0);
@@ -79,7 +74,7 @@ contract TranchePool is JuniorTrancheToken {
      * @dev - A farmer borrow specified-amount from this pool
      * @dev - Borrowing rate is the fixed-rate (that is determined by the period specified)
      */
-    function borrow(uint principleBorrowingAmount, uint periodOfMaturity) public {
+    function borrow(address asset, uint principleBorrowingAmount, uint periodOfMaturity) public {
         address farmer = msg.sender;
 
         // [Todo]: @dev - Calculate repaid-amount based on fixed-rate and the period of maturity. Then, a farmer receive equal amount (that will be repaid when maturity) of brTokens.
@@ -89,7 +84,8 @@ contract TranchePool is JuniorTrancheToken {
         brToken.transfer(farmer, totalAmountRepaid);
 
         // @dev - Amount of borrowing token is transferred into a farmer's wallet
-        dai.transfer(farmer, totalAmountRepaid);
+        IERC20 stablecoin = IERC20(asset);
+        stablecoin.transfer(farmer, totalAmountRepaid);
     }
 
 }
