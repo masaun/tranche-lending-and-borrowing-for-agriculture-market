@@ -21,16 +21,20 @@ contract TranchePool is JuniorTrancheToken {
     // junior BOND tranche (NFT)
     address public juniorBondTranche; // IBond
 
+    // Original token
+    IERC20 public dai;
+
     constructor(
         string memory name_,
         string memory symbol_,
-        uint8 decimals_
+        uint8 decimals_,
+        IERC20 dai_
     ) JuniorTrancheToken(name_, symbol_, decimals_) {
-        // [Todo]:
+        dai = dai_;
     }
 
     /**
-     * @dev - A investor deposit stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
+     * @dev - A lender deposit (=lend) stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
      * @dev - Yield is generated through existing lending protocols (e.g. AAVE, Compound)
      */
     function deposit(uint amount) public {
@@ -56,9 +60,12 @@ contract TranchePool is JuniorTrancheToken {
 
     /**
      * @dev - A farmer borrow specified-amount from this pool
+     * @dev - Borrowing rate is the fixed-rate
      */
-    function borrow() public {
+    function borrow(uint amount) public {
         // [Todo]: 
+        address farmer = msg.sender;
+        dai.transfer(farmer, amount);
     }
 
 }
