@@ -21,8 +21,11 @@ contract TranchePool is JuniorTrancheToken {
     // junior BOND tranche (NFT)
     address public juniorBondTranche; // IBond
 
-    // Original token
+    // Original token that is accumulated by junior/senior BOND tranche
     IERC20 public dai;
+
+    // This is token that represent amount that should be repaid when maturity.
+    IERC20 public brToken;
 
     constructor(
         string memory name_,
@@ -60,12 +63,19 @@ contract TranchePool is JuniorTrancheToken {
 
     /**
      * @dev - A farmer borrow specified-amount from this pool
-     * @dev - Borrowing rate is the fixed-rate
+     * @dev - Borrowing rate is the fixed-rate (that is determined by the period specified)
      */
-    function borrow(uint amount) public {
-        // [Todo]: 
+    function borrow(uint principleBorrowingAmount, uint periodOfMaturity) public {
         address farmer = msg.sender;
-        dai.transfer(farmer, amount);
+
+        // [Todo]: @dev - Calculate repaid-amount based on fixed-rate and the period of maturity. Then, a farmer receive equal amount (that will be repaid when maturity) of brTokens.
+        uint fixedRateToBorrow = 0;  // [Todo]: Replace with property value 
+        uint interestAmountRepaid = principleBorrowingAmount * fixedRateToBorrow * periodOfMaturity;
+        uint totalAmountRepaid = principleBorrowingAmount + interestAmountRepaid;
+        brToken.transfer(farmer, totalAmountRepaid);
+
+        // @dev - Amount of borrowing token is transferred into a farmer's wallet
+        dai.transfer(farmer, totalAmountRepaid);
     }
 
 }
