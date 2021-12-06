@@ -5,6 +5,7 @@ import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import { JuniorTrancheToken } from "./JuniorTrancheToken.sol";
+import { BorrowToken } from "./BorrowToken.sol";
 
 import { ILendingPool } from "./yield-sources/aave-v2/ILendingPool.sol";
 
@@ -24,7 +25,7 @@ contract TranchePool is JuniorTrancheToken {
     address public juniorBondTranche; // IBond
 
     // This is token that represent amount that should be repaid when maturity.
-    IERC20 public brToken;
+    BorrowToken public borrowToken;
 
     // AAVE-v2 Lending Pool
     ILendingPool public lendingPool;
@@ -81,7 +82,7 @@ contract TranchePool is JuniorTrancheToken {
         uint fixedRateToBorrow = 0;  // [Todo]: Replace with property value 
         uint interestAmountRepaid = principleBorrowingAmount * fixedRateToBorrow * periodOfMaturity;
         uint totalAmountRepaid = principleBorrowingAmount + interestAmountRepaid;
-        brToken.transfer(farmer, totalAmountRepaid);
+        borrowToken.transfer(farmer, totalAmountRepaid);
 
         // @dev - Amount of borrowing token is transferred into a farmer's wallet
         IERC20 stablecoin = IERC20(asset);

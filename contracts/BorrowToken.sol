@@ -1,14 +1,13 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.7.6;
-pragma abicoder v2;
 
 import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
 /**
- * @dev - This is a Junior Tranche Token contract that is ERC20 token
+ * @dev - This is a ERC20 token that represent total repaid-amount of stablecoin borrowed
  */ 
-contract JuniorTrancheToken is ERC20 {
+contract BorrowToken is ERC20 {
 
     constructor(
         string memory name_,
