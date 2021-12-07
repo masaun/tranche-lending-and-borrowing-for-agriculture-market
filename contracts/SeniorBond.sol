@@ -3,7 +3,7 @@ pragma solidity ^0.7.6;
 
 import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-import { IBond } from "./IBond.sol";
+import { IBond } from "./interfaces/IBond.sol";
 
 
 /**
