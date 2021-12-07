@@ -4,7 +4,7 @@ pragma solidity ^0.7.6;
 import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import { JuniorTrancheToken } from "./JuniorTrancheToken.sol";
+import { JuniorToken } from "./JuniorToken.sol";
 import { BorrowToken } from "./BorrowToken.sol";
 
 import { BondStructs } from "./commons/BondStructs.sol";
@@ -18,7 +18,7 @@ import { ILendingPool } from "./yield-sources/aave-v2/ILendingPool.sol";
  * 
  * @dev - This smart contract is integrated with existing Lending Protocols in order to generate yield for allocating into 2 Pools (Senior/Junior).
  */ 
-contract TranchePool is JuniorTrancheToken, BondStructs {
+contract TranchePool is JuniorToken, BondStructs {
 
     // senior BOND tranche (NFT)
     address public seniorBondTranche; // IBond
@@ -38,7 +38,7 @@ contract TranchePool is JuniorTrancheToken, BondStructs {
         string memory symbol_,
         uint8 decimals_,
         ILendingPool lendingPool_
-    ) JuniorTrancheToken(name_, symbol_, decimals_) {
+    ) JuniorToken(name_, symbol_, decimals_) {
         lendingPool = lendingPool_;
     }
 

@@ -6,9 +6,9 @@ import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
 /**
- * @dev - This is a Junior Tranche Token contract that is ERC20 token
+ * @dev - This is a Junior Token contract that is ERC20 token
  */ 
-contract JuniorTrancheToken is ERC20 {
+contract JuniorToken is ERC20 {
 
     constructor(
         string memory name_,

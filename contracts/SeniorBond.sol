@@ -7,9 +7,9 @@ import { IBond } from "./IBond.sol";
 
 
 /**
- * @dev - This is a pool (Bond) contract for the Senior Tranche
+ * @dev - This is a smart contract for the Senior Bond
  */ 
-contract SeniorTranche is IBond, ERC721 {
+contract SeniorBond is IBond, ERC721 {
 
     address public override tranchePool;
     //address public override smartYield;

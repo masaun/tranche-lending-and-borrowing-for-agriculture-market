@@ -7,9 +7,9 @@ import { IBond } from "./IBond.sol";
 
 
 /**
- * @dev - This is a pool (Bond) contract for the Junior Tranche
+ * @dev - This is a smart contract for the Junior Bond
  */ 
-contract JuniorTranche is IBond, ERC721 {
+contract JuniorBond is IBond, ERC721 {
 
     address public override tranchePool;
     //address public override smartYield;
