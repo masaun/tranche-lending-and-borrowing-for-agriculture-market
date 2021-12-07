@@ -147,11 +147,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     )
       external
     {
-        require(
-          false == _setup,
-          "SY: already setup"
-        );
-
         controller = controller_;
         pool = pool_;
         seniorBond = seniorBond_;
@@ -180,24 +175,9 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     {
         _beforeProviderOp(block.timestamp);
 
-        require(
-          false == IController(controller).PAUSED_BUY_JUNIOR_TOKEN(),
-          "SY: buyTokens paused"
-        );
-
-        require(
-          block.timestamp <= deadline_,
-          "SY: buyTokens deadline"
-        );
-
         uint256 fee = MathUtils.fractionOf(underlyingAmount_, IController(controller).FEE_BUY_JUNIOR_TOKEN());
         // (underlyingAmount_ - fee) * EXP_SCALE / price()
         uint256 getsTokens = (underlyingAmount_.sub(fee)).mul(EXP_SCALE).div(price());
-
-        require(
-          getsTokens >= minTokens_,
-          "SY: buyTokens minTokens"
-        );
 
         // ---
 
@@ -220,11 +200,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     {
         _beforeProviderOp(block.timestamp);
 
-        require(
-          block.timestamp <= deadline_,
-          "SY: sellTokens deadline"
-        );
-
         // share of these tokens in the debt
         // tokenAmount_ * EXP_SCALE / totalSupply()
         uint256 debtShare = tokenAmount_.mul(EXP_SCALE).div(totalSupply());
@@ -233,11 +208,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
         // debt share is forfeit, and only diff is returned to user
         // (tokenAmount_ * price()) / EXP_SCALE - forfeits
         uint256 toPay = tokenAmount_.mul(price()).div(EXP_SCALE).sub(forfeits);
-
-        require(
-          toPay >= minUnderlying_,
-          "SY: sellTokens minUnderlying"
-        );
 
         // ---
 
@@ -263,37 +233,7 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     {
         _beforeProviderOp(block.timestamp);
 
-        require(
-          false == IController(controller).PAUSED_BUY_SENIOR_BOND(),
-          "SY: buyBond paused"
-        );
-
-        require(
-          block.timestamp <= deadline_,
-          "SY: buyBond deadline"
-        );
-
-        require(
-            0 < forDays_ && forDays_ <= IController(controller).BOND_LIFE_MAX(),
-            "SY: buyBond forDays"
-        );
-
         uint256 gain = bondGain(principalAmount_, forDays_);
-
-        require(
-          gain >= minGain_,
-          "SY: buyBond minGain"
-        );
-
-        require(
-          gain > 0,
-          "SY: buyBond gain 0"
-        );
-
-        require(
-          gain < underlyingLoanable(),
-          "SY: buyBond underlyingLoanable"
-        );
 
         uint256 issuedAt = block.timestamp;
 
@@ -332,16 +272,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
 
         // 1 + abond.maturesAt / EXP_SCALE
         uint256 maturesAt = abond.maturesAt.div(EXP_SCALE).add(1);
-
-        require(
-          block.timestamp <= deadline_,
-          "SY: buyJuniorBond deadline"
-        );
-
-        require(
-          maturesAt <= maxMaturesAt_,
-          "SY: buyJuniorBond maxMaturesAt"
-        );
 
         JuniorBond memory jb = JuniorBond(
           tokenAmount_,
@@ -384,11 +314,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     {
         _beforeProviderOp(block.timestamp);
 
-        require(
-            block.timestamp >= seniorBonds[bondId_].maturesAt,
-            "SY: redeemBond not matured"
-        );
-
         // bondToken.ownerOf will revert for burned tokens
         address payTo = IBond(seniorBond).ownerOf(bondId_);
         // seniorBonds[bondId_].gain + seniorBonds[bondId_].principal
@@ -419,10 +344,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
         _beforeProviderOp(block.timestamp);
 
         JuniorBond memory jb = juniorBonds[jBondId_];
-        require(
-            jb.maturesAt <= block.timestamp,
-            "SY: redeemJuniorBond maturesAt"
-        );
 
         JuniorBondsAt memory jBondsAt = juniorBondsMaturingAt[jb.maturesAt];
 
@@ -457,10 +378,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     function liquidateJuniorBonds(uint256 upUntilTimestamp_)
       external override
     {
-      require(
-        upUntilTimestamp_ <= block.timestamp,
-        "SY: liquidateJuniorBonds in future"
-      );
       _beforeProviderOp(upUntilTimestamp_);
     }
 
@@ -582,16 +499,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     {
         JuniorBondsAt storage jBondsAt = juniorBondsMaturingAt[timestamp_];
 
-        require(
-          jBondsAt.tokens > 0,
-          "SY: nothing to liquidate"
-        );
-
-        require(
-          jBondsAt.price == 0,
-          "SY: already liquidated"
-        );
-
         jBondsAt.price = price();
 
         // ---
@@ -624,11 +531,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     function _mintBond(address to_, SeniorBond memory bond_)
       internal
     {
-        require(
-          seniorBondId < MAX_UINT256,
-          "SY: _mintBond"
-        );
-
         seniorBondId++;
         seniorBonds[seniorBondId] = bond_;
         _accountBond(bond_);
@@ -701,11 +603,6 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     function _mintJuniorBond(address to_, JuniorBond memory jb_)
       internal
     {
-        require(
-          juniorBondId < MAX_UINT256,
-          "SY: _mintJuniorBond"
-        );
-
         juniorBondId++;
         juniorBonds[juniorBondId] = jb_;
 
