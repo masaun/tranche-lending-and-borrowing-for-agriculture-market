@@ -5,6 +5,10 @@ pragma abicoder v2;
 interface ITranchePool {
 //interface ISmartYield {
 
+    ///===================================================================================
+    /// @dev - Structs below are defined in the ./contracts/bondCommons/BondStorages.sol
+    ///===================================================================================
+
     // // a senior BOND (metadata for NFT)
     // struct SeniorBond {
     //     // amount seniors put in
