@@ -755,5 +755,4 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
         _transfer(from_, address(this), amount_);
     }
 
-    // /internals
 }
