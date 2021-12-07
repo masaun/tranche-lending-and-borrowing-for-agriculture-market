@@ -7,7 +7,8 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { JuniorToken } from "./JuniorToken.sol";
 import { BorrowToken } from "./BorrowToken.sol";
 
-import { BondStorages } from "./storages/BondStorages.sol";
+import { BondStorages } from "./bondCommons/BondStorages.sol";
+import { BondEvents } from "./bondCommons/BondEvents.sol";
 
 import { ILendingPool } from "./yield-sources/aave-v2/ILendingPool.sol";
 
@@ -18,13 +19,44 @@ import { ILendingPool } from "./yield-sources/aave-v2/ILendingPool.sol";
  * 
  * @dev - This smart contract is integrated with existing Lending Protocols in order to generate yield for allocating into 2 Pools (Senior/Junior).
  */ 
-contract TranchePool is JuniorToken, BondStorages {
+contract TranchePool is JuniorToken, BondStorages, BondEvents {
 
-    // senior BOND tranche (NFT)
+    using SafeMath for uint256;
+
+    uint256 public constant MAX_UINT256 = uint256(-1);
+    uint256 public constant EXP_SCALE = 1e18;
+
+    // controller address
+    address public override controller;
+
+    // address of IProviderPool
+    address public pool;
+
+    // senior BOND (NFT)
     address public seniorBond; // IBond
 
-    // junior BOND tranche (NFT)
+    // junior BOND (NFT)
     address public juniorBond; // IBond
+
+    // latest SeniorBond Id
+    uint256 public seniorBondId;
+
+    // latest JuniorBond Id
+    uint256 public juniorBondId;
+
+    // underlying amount in matured and liquidated juniorBonds
+    uint256 public underlyingLiquidatedJuniors;
+
+    // tokens amount in unmatured juniorBonds or matured and unliquidated
+    uint256 public tokensInJuniorBonds;
+
+    // last index of juniorBondsMaturities that was liquidated
+    uint256 public juniorBondsMaturitiesPrev;
+    // list of junior bond maturities (timestamps)
+    uint256[] public juniorBondsMaturities;
+
+
+
 
     // This is token that represent amount that should be repaid when maturity.
     BorrowToken public borrowToken;
@@ -90,5 +122,12 @@ contract TranchePool is JuniorToken, BondStorages {
         IERC20 stablecoin = IERC20(asset);
         stablecoin.transfer(farmer, totalAmountRepaid);
     }
+
+
+
+    ///-------------------------------------------------------
+    /// Reference from the SmartYield.sol
+    ///-------------------------------------------------------
+
 
 }
