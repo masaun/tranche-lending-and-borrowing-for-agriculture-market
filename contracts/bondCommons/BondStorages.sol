@@ -2,7 +2,7 @@
 pragma solidity ^0.7.6;
 
 /**
- * @dev - This is a smart contract that bond-related structs are stored.
+ * @dev - This is a smart contract that bond-related structs and storages are defined.
  */ 
 contract BondStorages {
 
