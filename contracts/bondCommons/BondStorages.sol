@@ -2,9 +2,34 @@
 pragma solidity ^0.7.6;
 
 /**
- * @dev - This is a smart contract that bond-related structs are stored.
+ * @dev - This is a smart contract that bond-related structs and storages are defined.
  */ 
-contract BondStructs {
+contract BondStorages {
+
+    ///--------------------------------
+    /// Storages
+    ///--------------------------------
+
+    // checkpoints for all JuniorBonds matureing at (timestamp) -> (JuniorBondsAt)
+    // timestamp -> JuniorBondsAt
+    mapping(uint256 => JuniorBondsAt) public juniorBondsMaturingAt;
+
+    // metadata for senior bonds
+    // bond id => bond (SeniorBond)
+    mapping(uint256 => SeniorBond) public seniorBonds;
+
+    // metadata for junior bonds
+    // bond id => bond (JuniorBond)
+    mapping(uint256 => JuniorBond) public juniorBonds;
+
+    // pool state / average bond
+    // holds rate of payment by juniors to seniors
+    SeniorBond public abond;
+
+
+    ///--------------------------------
+    /// Structs
+    ///--------------------------------
 
     // a senior BOND (metadata for NFT)
     struct SeniorBond {
