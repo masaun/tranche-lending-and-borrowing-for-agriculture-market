@@ -19,12 +19,4 @@ contract BondEvents {
 
     event RedeemJuniorBond(address indexed owner, uint256 indexed juniorBondId, uint256 underlyingOut);
 
-    modifier onlyControllerOrDao {
-      require(
-        msg.sender == controller || msg.sender == IController(controller).dao(),
-        "PPC: only controller/DAO"
-      );
-      _;
-    }
-
 }

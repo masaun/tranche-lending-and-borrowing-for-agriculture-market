@@ -4,6 +4,11 @@ pragma solidity ^0.7.6;
 import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+import { MathUtils } from "./lib/math/MathUtils.sol";
+
+import { ITranchePool } from "./interfaces/ITranchePool.sol";
+import { IBond } from "./interfaces/IBond.sol";
+
 import { JuniorToken } from "./JuniorToken.sol";
 import { BorrowToken } from "./BorrowToken.sol";
 
@@ -19,7 +24,7 @@ import { ILendingPool } from "./yield-sources/aave-v2/ILendingPool.sol";
  * 
  * @dev - This smart contract is integrated with existing Lending Protocols in order to generate yield for allocating into 2 Pools (Senior/Junior).
  */ 
-contract TranchePool is JuniorToken, BondStorages, BondEvents {
+contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
 
     using SafeMath for uint256;
 
@@ -55,6 +60,7 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     // list of junior bond maturities (timestamps)
     uint256[] public juniorBondsMaturities;
 
+    bool public _setup;
 
 
 
@@ -131,24 +137,16 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     /// Below are the code that is referenced from the SmartYield.sol
     ///--------------------------------------------------------------------
 
-    constructor(
-      string memory name_,
-      string memory symbol_,
-      uint8 decimals_
-    )
-      JuniorToken(name_, symbol_, decimals_)
-    {}
-
     function setup(
-      address controller_,
-      address pool_,
+      //address controller_,
+      //address pool_,
       address seniorBond_,
       address juniorBond_
     )
       external
     {
-        controller = controller_;
-        pool = pool_;
+        //controller = controller_;
+        //pool = pool_;
         seniorBond = seniorBond_;
         juniorBond = juniorBond_;
 
@@ -160,9 +158,9 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     // change the controller, only callable by old controller or dao
     function setController(address newController_)
       external override
-      onlyControllerOrDao
+      //onlyControllerOrDao
     {
-      controller = newController_;
+      //controller = newController_;
     }
 
     // buy at least _minTokens with _underlyingAmount, before _deadline passes
@@ -175,7 +173,9 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     {
         _beforeProviderOp(block.timestamp);
 
-        uint256 fee = MathUtils.fractionOf(underlyingAmount_, IController(controller).FEE_BUY_JUNIOR_TOKEN());
+        uint256 fee = 1* 1e18;  // [Todo]: Replace static value with dynamic value
+        //uint256 fee = MathUtils.fractionOf(underlyingAmount_, IController(controller).FEE_BUY_JUNIOR_TOKEN());
+
         // (underlyingAmount_ - fee) * EXP_SCALE / price()
         uint256 getsTokens = (underlyingAmount_.sub(fee)).mul(EXP_SCALE).div(price());
 
@@ -183,8 +183,11 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
 
         address buyer = msg.sender;
 
-        IProvider(pool)._takeUnderlying(buyer, underlyingAmount_);
-        IProvider(pool)._depositProvider(underlyingAmount_, fee);
+        //@dev - [Todo]: Deposit "underlyingAmount" into AAVE, etc...
+        //IProvider(pool)._takeUnderlying(buyer, underlyingAmount_);
+        //IProvider(pool)._depositProvider(underlyingAmount_, fee);
+
+        //@dev - Mint JuniorTokens
         _mint(buyer, getsTokens);
 
         emit BuyTokens(buyer, underlyingAmount_, getsTokens, fee);
@@ -201,10 +204,13 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
         _beforeProviderOp(block.timestamp);
 
         // share of these tokens in the debt
+
         // tokenAmount_ * EXP_SCALE / totalSupply()
         uint256 debtShare = tokenAmount_.mul(EXP_SCALE).div(totalSupply());
+        
         // (abondDebt() * debtShare) / EXP_SCALE
         uint256 forfeits = abondDebt().mul(debtShare).div(EXP_SCALE);
+        
         // debt share is forfeit, and only diff is returned to user
         // (tokenAmount_ * price()) / EXP_SCALE - forfeits
         uint256 toPay = tokenAmount_.mul(price()).div(EXP_SCALE).sub(forfeits);
@@ -214,8 +220,10 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
         address seller = msg.sender;
 
         _burn(seller, tokenAmount_);
-        IProvider(pool)._withdrawProvider(toPay, 0);
-        IProvider(pool)._sendUnderlying(seller, toPay);
+
+        //@dev - [Todo]: Withraw "underlyingAmount" from AAVE, etc...
+        //IProvider(pool)._withdrawProvider(toPay, 0);
+        //IProvider(pool)._sendUnderlying(seller, toPay);
 
         emit SellTokens(seller, tokenAmount_, toPay, forfeits);
     }
@@ -241,8 +249,9 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
 
         address buyer = msg.sender;
 
-        IProvider(pool)._takeUnderlying(buyer, principalAmount_);
-        IProvider(pool)._depositProvider(principalAmount_, 0);
+        //@dev - [Todo]: Deposit "principalAmount" into AAVE, etc...
+        //IProvider(pool)._takeUnderlying(buyer, principalAmount_);
+        //IProvider(pool)._depositProvider(principalAmount_, 0);
 
         SeniorBond memory b =
             SeniorBond(
@@ -282,7 +291,10 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
 
         address buyer = msg.sender;
 
+        //@dev - Buy Junior tokens
         _takeTokens(buyer, tokenAmount_);
+        
+        //@dev - Mint a JuniorBond
         _mintJuniorBond(buyer, jb);
 
         emit BuyJuniorBond(buyer, juniorBondId, tokenAmount_, maturesAt);
@@ -316,9 +328,11 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
 
         // bondToken.ownerOf will revert for burned tokens
         address payTo = IBond(seniorBond).ownerOf(bondId_);
+
         // seniorBonds[bondId_].gain + seniorBonds[bondId_].principal
         uint256 payAmnt = seniorBonds[bondId_].gain.add(seniorBonds[bondId_].principal);
-        uint256 fee = MathUtils.fractionOf(seniorBonds[bondId_].gain, IController(controller).FEE_REDEEM_SENIOR_BOND());
+        uint256 fee;  // [Todo]: Replace this with actual value
+        //uint256 fee = MathUtils.fractionOf(seniorBonds[bondId_].gain, IController(controller).FEE_REDEEM_SENIOR_BOND());
         payAmnt = payAmnt.sub(fee);
 
         // ---
@@ -331,8 +345,9 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
         // bondToken.burn will revert for already burned tokens
         IBond(seniorBond).burn(bondId_);
 
-        IProvider(pool)._withdrawProvider(payAmnt, fee);
-        IProvider(pool)._sendUnderlying(payTo, payAmnt);
+        //@dev - [Todo]: Withdraw "payAmn" from AAVE, etc...
+        //IProvider(pool)._withdrawProvider(payAmnt, fee);
+        //IProvider(pool)._sendUnderlying(payTo, payAmnt);
 
         emit RedeemSeniorBond(payTo, bondId_, fee);
     }
@@ -354,9 +369,12 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
 
         // ---
 
+        //@dev - Burn a JuniorBond
         _burnJuniorBond(jBondId_);
-        IProvider(pool)._withdrawProvider(payAmnt, 0);
-        IProvider(pool)._sendUnderlying(payTo, payAmnt);
+
+        //@dev - [Todo]: Withdraw "payAmn" from AAVE, etc...        
+        //IProvider(pool)._withdrawProvider(payAmnt, 0);
+        //IProvider(pool)._sendUnderlying(payTo, payAmnt);
         underlyingLiquidatedJuniors = underlyingLiquidatedJuniors.sub(payAmnt);
 
         emit RedeemJuniorBond(payTo, jBondId_, payAmnt);
@@ -368,11 +386,13 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
       external override
     returns (uint256)
     {
-      return IBondModel(IController(controller).bondModel()).maxDailyRate(
-        underlyingTotal(),
-        underlyingLoanable(),
-        IController(controller).providerRatePerDay()
-      );
+        uint256 _maxBondDailyRate;  // [Todo]: Replace this with actual value
+        return _maxBondDailyRate;
+      // return IBondModel(IController(controller).bondModel()).maxDailyRate(
+      //   underlyingTotal(),
+      //   underlyingLoanable(),
+      //   IController(controller).providerRatePerDay()
+      // );
     }
 
     function liquidateJuniorBonds(uint256 upUntilTimestamp_)
@@ -390,13 +410,15 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
       public override
     returns (uint256)
     {
-      return IBondModel(IController(controller).bondModel()).gain(
-        underlyingTotal(),
-        underlyingLoanable(),
-        IController(controller).providerRatePerDay(),
-        principalAmount_,
-        forDays_
-      );
+        uint bondGained;    // [Todo]: Replace it with actual value
+        return bondGained;
+      // return IBondModel(IController(controller).bondModel()).gain(
+      //   underlyingTotal(),
+      //   underlyingLoanable(),
+      //   IController(controller).providerRatePerDay(),
+      //   principalAmount_,
+      //   forDays_
+      // );
     }
 
     // jToken price * EXP_SCALE
@@ -414,7 +436,9 @@ contract TranchePool is JuniorToken, BondStorages, BondEvents {
     returns(uint256)
     {
       // underlyingBalance() - underlyingLiquidatedJuniors
-      return IProvider(pool).underlyingBalance().sub(underlyingLiquidatedJuniors);
+      uint _underlyingTotal;   // [Todo]: Replace this with actual value
+      return _underlyingTotal;
+      //return IProvider(pool).underlyingBalance().sub(underlyingLiquidatedJuniors);
     }
 
     function underlyingJuniors()
