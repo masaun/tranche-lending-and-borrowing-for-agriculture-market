@@ -2,15 +2,16 @@
 pragma solidity ^0.7.6;
 pragma abicoder v2;
 
-import "@openzeppelin/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 
-import "../../yield-sources/aave-v2/IAToken.sol";
-import "../../yield-sources/aave-v2/ILendingPool.sol";
-import "../../yield-sources/aave-v2/IStakedTokenIncentivesController.sol";
+import { IAToken } from "../../yield-sources/aave-v2/IAToken.sol";
+import { ILendingPool } from "../../yield-sources/aave-v2/ILendingPool.sol";
+import { IStakedTokenIncentivesController } from "../../yield-sources/aave-v2/IStakedTokenIncentivesController.sol";
 
-import "../IYieldSourceProvider.sol";
+import { IYieldSourceProvider } from "../IYieldSourceProvider.sol";
+
 
 contract AaveAsYieldSourceProvider is IYieldSourceProvider {
     using SafeMath for uint256;
