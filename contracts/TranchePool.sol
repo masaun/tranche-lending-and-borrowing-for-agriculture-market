@@ -185,8 +185,8 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
         address buyer = msg.sender;
 
         //@dev - [Todo]: Deposit "underlyingAmount" into AAVE, etc...
-        //IProvider(pool)._takeUnderlying(buyer, underlyingAmount_);
-        //IProvider(pool)._depositProvider(underlyingAmount_, fee);
+        IYieldSourceProvider(pool)._takeUnderlying(buyer, underlyingAmount_);
+        IYieldSourceProvider(pool)._depositProvider(underlyingAmount_, fee);
 
         //@dev - Mint JuniorTokens
         _mint(buyer, getsTokens);
@@ -223,8 +223,8 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
         _burn(seller, tokenAmount_);
 
         //@dev - [Todo]: Withraw "underlyingAmount" from AAVE, etc...
-        //IProvider(pool)._withdrawProvider(toPay, 0);
-        //IProvider(pool)._sendUnderlying(seller, toPay);
+        IYieldSourceProvider(pool)._withdrawProvider(toPay, 0);
+        IYieldSourceProvider(pool)._sendUnderlying(seller, toPay);
 
         emit SellTokens(seller, tokenAmount_, toPay, forfeits);
     }
@@ -251,8 +251,8 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
         address buyer = msg.sender;
 
         //@dev - [Todo]: Deposit "principalAmount" into AAVE, etc...
-        //IProvider(pool)._takeUnderlying(buyer, principalAmount_);
-        //IProvider(pool)._depositProvider(principalAmount_, 0);
+        IYieldSourceProvider(pool)._takeUnderlying(buyer, principalAmount_);
+        IYieldSourceProvider(pool)._depositProvider(principalAmount_, 0);
 
         SeniorBond memory b =
             SeniorBond(
@@ -347,8 +347,8 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
         IBond(seniorBond).burn(bondId_);
 
         //@dev - [Todo]: Withdraw "payAmn" from AAVE, etc...
-        //IProvider(pool)._withdrawProvider(payAmnt, fee);
-        //IProvider(pool)._sendUnderlying(payTo, payAmnt);
+        IYieldSourceProvider(pool)._withdrawProvider(payAmnt, fee);
+        IYieldSourceProvider(pool)._sendUnderlying(payTo, payAmnt);
 
         emit RedeemSeniorBond(payTo, bondId_, fee);
     }
@@ -374,8 +374,8 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
         _burnJuniorBond(jBondId_);
 
         //@dev - [Todo]: Withdraw "payAmn" from AAVE, etc...        
-        //IProvider(pool)._withdrawProvider(payAmnt, 0);
-        //IProvider(pool)._sendUnderlying(payTo, payAmnt);
+        IYieldSourceProvider(pool)._withdrawProvider(payAmnt, 0);
+        IYieldSourceProvider(pool)._sendUnderlying(payTo, payAmnt);
         underlyingLiquidatedJuniors = underlyingLiquidatedJuniors.sub(payAmnt);
 
         emit RedeemJuniorBond(payTo, jBondId_, payAmnt);
@@ -437,9 +437,7 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
     returns(uint256)
     {
       // underlyingBalance() - underlyingLiquidatedJuniors
-      uint _underlyingTotal;   // [Todo]: Replace this with actual value
-      return _underlyingTotal;
-      //return IProvider(pool).underlyingBalance().sub(underlyingLiquidatedJuniors);
+      return IYieldSourceProvider(pool).underlyingBalance().sub(underlyingLiquidatedJuniors);
     }
 
     function underlyingJuniors()

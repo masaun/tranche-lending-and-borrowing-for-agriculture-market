@@ -59,7 +59,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
 
     it("Check currentBlock", async function () {
         const _currentBlock = await currentBlock()
-        console.log(`currentBlock: ${ JSON.stringify(_currentBlock) }`)
+        //console.log(`currentBlock: ${ JSON.stringify(_currentBlock) }`)
     })
 
     it("Deploy or create smart contract instances", async function () {
