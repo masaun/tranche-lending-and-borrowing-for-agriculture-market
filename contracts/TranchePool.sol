@@ -250,7 +250,7 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
 
         address buyer = msg.sender;
 
-        //@dev - [Todo]: Deposit "principalAmount" into AAVE, etc...
+        //@dev - Deposit (principle amount of) underlying tokens into YieldSourceProvider (such as AAVE)
         IYieldSourceProvider(pool)._takeUnderlying(buyer, principalAmount_);
         IYieldSourceProvider(pool)._depositProvider(principalAmount_, 0);
 
@@ -346,7 +346,7 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
         // bondToken.burn will revert for already burned tokens
         IBond(seniorBond).burn(bondId_);
 
-        //@dev - [Todo]: Withdraw "payAmn" from AAVE, etc...
+        //@dev - Withdraw from YieldSourceProvider (such as AAVE)
         IYieldSourceProvider(pool)._withdrawProvider(payAmnt, fee);
         IYieldSourceProvider(pool)._sendUnderlying(payTo, payAmnt);
 
@@ -373,7 +373,7 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
         //@dev - Burn a JuniorBond
         _burnJuniorBond(jBondId_);
 
-        //@dev - [Todo]: Withdraw "payAmn" from AAVE, etc...        
+        //@dev - Withdraw from YieldSourceProvider (such as AAVE)
         IYieldSourceProvider(pool)._withdrawProvider(payAmnt, 0);
         IYieldSourceProvider(pool)._sendUnderlying(payTo, payAmnt);
         underlyingLiquidatedJuniors = underlyingLiquidatedJuniors.sub(payAmnt);

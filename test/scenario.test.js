@@ -7,6 +7,14 @@ const LENDING_POOL = '0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9'
 const aDAI = '0x028171bCA77440897B824Ca71D1c56caC55b68A3'
 const DAI = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
 
+//@dev - Constants
+const A_HOUR = 60 * 60
+const A_DAY = 24 * A_HOUR
+
+//const BLOCKS_A_PERIOD = 4 * oracleCONF.windowSize / oracleCONF.granularity / 60
+//const BLOCKS_A_HOUR = 4 * 60
+//const BLOCKS_A_DAY = 24 * BLOCKS_A_HOUR
+
 
 /**
  * @dev - Scenario test (Tranche lending ~ borrowing)
@@ -26,6 +34,13 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
     let UNDERLYING
 
 
+    async function currentTimestamp() {
+        const date = new Date()
+        const a = date.getTime()
+        const _currentTimestamp = Math.floor( a / 1000 )   // Unit: Seconds
+        return _currentTimestamp                           // Unit: Seconds
+    }
+
     async function currentBlock() {
         return await ethers.provider.getBlock('latest')
     }
@@ -38,10 +53,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
         //@dev - Buy tokens -> tx.wait()
         const underlyingAmount = amountUnderlying_
         const minTokens = 1
-
-        const date = new Date()
-        const a = date.getTime()
-        const deadline = Math.floor( a / 1000 )   // Unit: Seconds
+        const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
         console.log('=== deadline ===', deadline)
 
         await (await tranchePool.connect(user).buyBond(underlyingAmount, minTokens, deadline)).wait()
@@ -51,6 +63,12 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
         // [TODO]: 
     }
 
+    async function buyJuniorBond(_tokenAmount, _maxMaturesAt) {
+        const tokenAmount = ethers.utils.parseEther(_tokenAmount)
+        const maxMaturesAt = ethers.utils.parseEther(_maxMaturesAt)
+        const TIME_IN_FUTURE = await currentTimestamp() + A_DAY
+        await tranchePool.connect(user).buyJuniorBond(tokenAmount, maxMaturesAt, TIME_IN_FUTURE)
+    }
 
     it("Check currentBlock", async function () {
         const _currentBlock = await currentBlock()
