@@ -45,27 +45,38 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
         return await ethers.provider.getBlock('latest')
     }
 
-    async function buyTokens(amountUnderlying) {
+    async function buyTokens(underlyingAmount_, minTokens_, deadline_) {
         //@dev - Approve underlying tokens
-        const amountUnderlying_ = ethers.utils.parseEther(amountUnderlying)
-        await underlying.connect(user).approve(pool.address, amountUnderlying)
+        const underlyingAmount = ethers.utils.parseEther(underlyingAmount_)
+        await underlying.connect(user).approve(pool.address, underlyingAmount)
 
         //@dev - Buy tokens -> tx.wait()
-        const underlyingAmount = amountUnderlying_
-        const minTokens = 1
-        const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
+        const minTokens = minTokens_                         // e.g). 1
+        const deadline = deadline_
+        //const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
         console.log('=== deadline ===', deadline)
 
-        await (await tranchePool.connect(user).buyBond(underlyingAmount, minTokens, deadline)).wait()
+        let transaction = await tranchePool.connect(user).buyBond(underlyingAmount, minTokens, deadline)
+        let txReceipt = await transaction.wait()
     }
 
-    async function buyBond() {
-        // [TODO]: 
+    async function buyBond(principalAmount_, minGain_, deadline_, forDays_) {
+        const principalAmount = principalAmount_
+        const minGain = minGain_
+        const deadline = deadline_
+        const forDays = forDays_
+
+        //@dev - Approve underlying tokens
+        //const underlyingAmount = ethers.utils.parseEther(underlyingAmount_)
+        //await underlying.connect(user).approve(pool.address, underlyingAmount)
+
+        let transaction = await tranchePool.connect(user).buyBond(principalAmount, minGain, deadline, forDays)
+        let txReceipt = await transaction.wait()
     }
 
-    async function buyJuniorBond(_tokenAmount, _maxMaturesAt) {
-        const tokenAmount = ethers.utils.parseEther(_tokenAmount)
-        const maxMaturesAt = ethers.utils.parseEther(_maxMaturesAt)
+    async function buyJuniorBond(tokenAmount_, maxMaturesAt_) {
+        const tokenAmount = ethers.utils.parseEther(tokenAmount_)
+        const maxMaturesAt = ethers.utils.parseEther(maxMaturesAt_)
         const TIME_IN_FUTURE = await currentTimestamp() + A_DAY
         await tranchePool.connect(user).buyJuniorBond(tokenAmount, maxMaturesAt, TIME_IN_FUTURE)
     }
