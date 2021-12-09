@@ -7,8 +7,6 @@ interface IYieldSourceProvider {
     function tranchePool() external view returns (address);
     //function smartYield() external view returns (address);
 
-    //function controller() external view returns (address);
-
     function underlyingFees() external view returns (uint256);
 
     // deposit underlyingAmount_ into provider, add takeFees_ to fees

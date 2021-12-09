@@ -21,8 +21,6 @@ contract AaveAsYieldSourceProvider is IYieldSourceProvider {
 
     address public override tranchePool;
 
-    //address public override controller;
-
     // fees colected in underlying
     uint256 public override underlyingFees;
 
@@ -53,7 +51,6 @@ contract AaveAsYieldSourceProvider is IYieldSourceProvider {
         );
 
         tranchePool = tranchePool_;
-        //controller = controller_;
 
         _setup = true;
     }
@@ -63,7 +60,6 @@ contract AaveAsYieldSourceProvider is IYieldSourceProvider {
     // take underlyingAmount_ from from_
     function _takeUnderlying(address from_, uint256 underlyingAmount_)
       external override
-      //onlySmartYieldOrController
     {
         uint256 balanceBefore = IERC20(uToken).balanceOf(address(this));
         IERC20(uToken).safeTransferFrom(from_, address(this), underlyingAmount_);
