@@ -7,6 +7,7 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { MathUtils } from "./lib/math/MathUtils.sol";
 
 import { ITranchePool } from "./interfaces/ITranchePool.sol";
+import { IYieldSourceProvider } from "./yield-source-provider/IYieldSourceProvider.sol";
 import { IBond } from "./interfaces/IBond.sol";
 
 import { JuniorToken } from "./JuniorToken.sol";
@@ -32,9 +33,9 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
     uint256 public constant EXP_SCALE = 1e18;
 
     // controller address
-    address public override controller;
+    //address public override controller;
 
-    // address of IProviderPool
+    // address of IYieldSourceProvider
     address public pool;
 
     // senior BOND (NFT)
