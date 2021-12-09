@@ -21,7 +21,7 @@ contract AaveAsYieldSourceProvider is IYieldSourceProvider {
 
     address public override tranchePool;
 
-    address public override controller;
+    //address public override controller;
 
     // fees colected in underlying
     uint256 public override underlyingFees;

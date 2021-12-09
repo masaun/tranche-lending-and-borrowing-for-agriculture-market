@@ -7,7 +7,7 @@ interface IYieldSourceProvider {
     function tranchePool() external view returns (address);
     //function smartYield() external view returns (address);
 
-    function controller() external view returns (address);
+    //function controller() external view returns (address);
 
     function underlyingFees() external view returns (uint256);
 
