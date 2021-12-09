@@ -1,5 +1,14 @@
 # Tranche Lending for farmers👩‍🌾🌽
 
+## 【Test】
+- Senario test
+```
+npm run test:Scenario
+```
+( `$ npx hardhat test ./test/scenario.test.js --network hardhat` )
+
+<br>
+
 ## 【References】
 - BUIDL IT
   - 🌽Agriculture related Project - Agri 10x 
