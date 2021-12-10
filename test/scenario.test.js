@@ -116,5 +116,54 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
         console.log(`UNDERLYING: ${ UNDERLYING }`)
     })
 
+    it("Whole scenario test (AAVE flow tests - yield and price movements)", async function () {
+        const priceInitial = await tranchePool.callStatic.price();
+        console.log(`priceInitial: ${ priceInitial }`)
+
+        await buyTokens(Wallet[0], 100_000 * 10 ** 6);
+        const gotJtokens1 = await tranchePool.callStatic.balanceOf(await Wallet[0].getAddress());
+        console.log(`gotJtokens1: ${ gotJtokens1 }`)
+
+        //await moveTimeWindowAndUpdate();
+
+        //const providerRatePerDayInitial = await controller.callStatic.providerRatePerDay();
+
+        const priceAfterJtokens = await tranchePool.callStatic.price();
+
+        await buyBond(Wallet[0], 100_000 * 10 ** 6, 3);
+
+        const bond1 = await tranchePool.seniorBonds(1);
+        const abond1 = await tranchePool.abond();
+
+        //await moveTimeWindowAndUpdate();
+
+        await buyBond(Wallet[0], 100_000 * 10 ** 6, 1);
+        const bond2 = await tranchePool.seniorBonds(2);
+
+        //await moveTimeWindowAndUpdate();
+
+        const priceAfter2Bonds = await tranchePool.callStatic.price();
+        expect(priceAfter2Bonds.gt(priceAfterJtokens), 'price increases after 2 bonds').equal(true);
+
+        await sellTokens(Wallet[0], 50_000 * 10 ** 6);
+
+        await buyJuniorBond(Wallet[0], gotJtokens1.sub(50_000 * 10 ** 6), TIME_IN_FUTURE);
+
+        for (let f = 0; f < 24 * 3; f++) {
+          await moveTimeWindowAndUpdate();
+        }
+
+        const priceAfter3Days = await tranchePool.callStatic.price();
+
+        await redeemBond(Wallet[0], 1);
+        await redeemBond(Wallet[0], 2);
+
+        await redeemJuniorBond(Wallet[0], 1);
+
+        const priceAfterWithdrawls = await tranchePool.callStatic.price();
+
+        const incentivesController = IStakedTokenIncentivesControllerFactory.connect(await aToken.getIncentivesController(), deployerSign);
+        const rewardToken = IERC20Factory.connect(await incentivesController.REWARD_TOKEN(), deployerSign)
+    })
 
 })
