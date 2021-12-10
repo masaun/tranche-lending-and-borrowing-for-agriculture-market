@@ -125,7 +125,15 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         const priceInitial = await tranchePool.callStatic.price();
         console.log(`priceInitial: ${ priceInitial }`)
 
-        await buyTokens(DEPLOYER, 100_000 * 10 ** 6);
+        const underlyingAmount_ = String(ethers.utils.parseEther('1'))  // 1 DAI
+        const minTokens_ = 100_000 * 10 ** 6
+        const deadline_ = await currentTimestamp() + A_HOUR
+        console.log(`underlyingAmount_: ${ underlyingAmount_ } , type: ${ typeof underlyingAmount_ }`)
+        console.log(`minTokens_: ${ minTokens_ } , type: ${ typeof minTokens_ }`)
+        console.log(`deadline_: ${ deadline_ } , type: ${ typeof deadline_ }`)
+
+        //@dev - Buy junior tokens
+        await buyTokens(underlyingAmount_, minTokens_, deadline_);
         const gotJtokens1 = await tranchePool.callStatic.balanceOf(DEPLOYER)  // [Error]: at the argument of "Wallet[0]"
         console.log(`gotJtokens1: ${ gotJtokens1 }`)
 
