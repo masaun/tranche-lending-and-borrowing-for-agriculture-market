@@ -52,7 +52,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
     async function buyTokens(underlyingAmount_, minTokens_, deadline_) {
         //@dev - Approve underlying tokens
         const underlyingAmount = ethers.utils.parseEther(underlyingAmount_)
-        await underlying.connect(user).approve(pool.address, underlyingAmount)
+        await underlying.connect(deployerSign).approve(pool.address, underlyingAmount)
 
         //@dev - Buy tokens -> tx.wait()
         const minTokens = minTokens_                         // e.g). 1
@@ -60,7 +60,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         //const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
         console.log('=== deadline ===', deadline)
 
-        let transaction = await tranchePool.connect(user).buyBond(underlyingAmount, minTokens, deadline)
+        let transaction = await tranchePool.connect(deployerSign).buyBond(underlyingAmount, minTokens, deadline)
         let txReceipt = await transaction.wait()
     }
 
@@ -72,9 +72,9 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
 
         //@dev - Approve underlying tokens
         //const underlyingAmount = ethers.utils.parseEther(underlyingAmount_)
-        //await underlying.connect(user).approve(pool.address, underlyingAmount)
+        //await underlying.connect(deployerSign).approve(pool.address, underlyingAmount)
 
-        let transaction = await tranchePool.connect(user).buyBond(principalAmount, minGain, deadline, forDays)
+        let transaction = await tranchePool.connect(deployerSign).buyBond(principalAmount, minGain, deadline, forDays)
         let txReceipt = await transaction.wait()
     }
 
@@ -82,7 +82,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         const tokenAmount = ethers.utils.parseEther(tokenAmount_)
         const maxMaturesAt = ethers.utils.parseEther(maxMaturesAt_)
         const TIME_IN_FUTURE = await currentTimestamp() + A_DAY
-        await tranchePool.connect(user).buyJuniorBond(tokenAmount, maxMaturesAt, TIME_IN_FUTURE)
+        await tranchePool.connect(deployerSign).buyJuniorBond(tokenAmount, maxMaturesAt, TIME_IN_FUTURE)
     }
 
     it("Check currentBlock", async function () {
@@ -141,7 +141,8 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
 
         //const providerRatePerDayInitial = await controller.callStatic.providerRatePerDay();
 
-        const priceAfterJtokens = await tranchePool.callStatic.price();
+        const priceAfterJtokens = await tranchePool.callStatic.price()
+        console.log(`priceAfterJtokens: ${ priceAfterJtokens }`)
 
         await buyBond(DEPLOYER, 100_000 * 10 ** 6, 3);
 
