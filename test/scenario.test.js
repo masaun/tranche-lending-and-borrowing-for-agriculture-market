@@ -55,7 +55,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         await underlying.connect(deployerSign).approve(pool.address, underlyingAmount)
 
         //@dev - Buy tokens -> tx.wait()
-        const minTokens = minTokens_                         // e.g). 1
+        const minTokens = minTokens_                           // e.g). 1
         const deadline = deadline_
         //const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
         console.log('=== deadline ===', deadline)
@@ -110,7 +110,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         pool = await AaveAsYieldSourceProvider.deploy(aToken)
 
         //@dev - Create a underlying token instance (Using "DAI" as a underlying token)
-        const underlying = await ethers.getContractAt('IERC20', DAI)
+        underlying = await ethers.getContractAt('IERC20', DAI)
 
         //@dev - Assign deployed-addresses
         TRANCHE_POOL = tranchePool.address
@@ -133,7 +133,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         console.log(`deadline_: ${ deadline_ } , type: ${ typeof deadline_ }`)
 
         //@dev - Buy junior tokens
-        await buyTokens(underlyingAmount_, minTokens_, deadline_);
+        await buyTokens(underlyingAmount_, minTokens_, deadline_)
         const gotJtokens1 = await tranchePool.callStatic.balanceOf(DEPLOYER)  // [Error]: at the argument of "Wallet[0]"
         console.log(`gotJtokens1: ${ gotJtokens1 }`)
 
