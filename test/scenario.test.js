@@ -19,9 +19,13 @@ const A_DAY = 24 * A_HOUR
 /**
  * @dev - Scenario test (Tranche lending ~ borrowing)
  */ 
-describe("Scenario test (Tranche lending ~ borrowing)", function () {
+describe("Scenario test (Tranche lending ~ borrowing)", async function () {
 
-    const user = Wallet
+    //@dev - deployer's signature
+    let deployerSign
+
+    //@dev - deployer's wallet address
+    let DEPLOYER
 
     //@dev - Contract instance
     let tranchePool   // TranchePool.sol
@@ -83,12 +87,13 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
 
     it("Check currentBlock", async function () {
         const _currentBlock = await currentBlock()
-        console.log(`currentBlock: ${ JSON.stringify(_currentBlock) }`)
+        //console.log(`currentBlock: ${ JSON.stringify(_currentBlock) }`)
     })
 
-    it("Check currentBlock", async function () {
-        const _currentBlock = await currentBlock()
-        //console.log(`currentBlock: ${ JSON.stringify(_currentBlock) }`)
+    it("Assign deployer's sign and wallet address", async function () {
+        [deployerSign] = await ethers.getSigners()    // Signature of deployer
+        DEPLOYER = deployerSign.address
+        console.log(`wallet address of deployer: ${ DEPLOYER }`)
     })
 
     it("Deploy or create smart contract instances", async function () {
@@ -117,15 +122,11 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
     })
 
     it("Whole scenario test (AAVE flow tests - yield and price movements)", async function () {
-
-        const [deployer] = await ethers.getSigners()    // Signature of deployer
-        console.log(`deployer: ${ deployer.address }`)
-
         const priceInitial = await tranchePool.callStatic.price();
         console.log(`priceInitial: ${ priceInitial }`)
 
-        await buyTokens(deployer, 100_000 * 10 ** 6);
-        const gotJtokens1 = await tranchePool.callStatic.balanceOf(deployer)  // [Error]: at the argument of "Wallet[0]"
+        await buyTokens(DEPLOYER, 100_000 * 10 ** 6);
+        const gotJtokens1 = await tranchePool.callStatic.balanceOf(DEPLOYER)  // [Error]: at the argument of "Wallet[0]"
         console.log(`gotJtokens1: ${ gotJtokens1 }`)
 
         //await moveTimeWindowAndUpdate();
@@ -134,14 +135,14 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
 
         const priceAfterJtokens = await tranchePool.callStatic.price();
 
-        await buyBond(deployer, 100_000 * 10 ** 6, 3);
+        await buyBond(DEPLOYER, 100_000 * 10 ** 6, 3);
 
         const bond1 = await tranchePool.seniorBonds(1);
         const abond1 = await tranchePool.abond();
 
         //await moveTimeWindowAndUpdate();
 
-        await buyBond(deployer, 100_000 * 10 ** 6, 1);
+        await buyBond(DEPLOYER, 100_000 * 10 ** 6, 1);
         const bond2 = await tranchePool.seniorBonds(2);
 
         //await moveTimeWindowAndUpdate();
@@ -149,9 +150,9 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
         const priceAfter2Bonds = await tranchePool.callStatic.price();
         expect(priceAfter2Bonds.gt(priceAfterJtokens), 'price increases after 2 bonds').equal(true);
 
-        await sellTokens(deployer, 50_000 * 10 ** 6);
+        await sellTokens(DEPLOYER, 50_000 * 10 ** 6);
 
-        await buyJuniorBond(deployer, gotJtokens1.sub(50_000 * 10 ** 6), TIME_IN_FUTURE);
+        await buyJuniorBond(DEPLOYER, gotJtokens1.sub(50_000 * 10 ** 6), TIME_IN_FUTURE);
 
         for (let f = 0; f < 24 * 3; f++) {
           await moveTimeWindowAndUpdate();
@@ -159,10 +160,10 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
 
         const priceAfter3Days = await tranchePool.callStatic.price();
 
-        await redeemBond(deployer, 1);
-        await redeemBond(deployer, 2);
+        await redeemBond(DEPLOYER, 1);
+        await redeemBond(DEPLOYER, 2);
 
-        await redeemJuniorBond(deployer, 1);
+        await redeemJuniorBond(DEPLOYER, 1);
 
         const priceAfterWithdrawls = await tranchePool.callStatic.price();
 
