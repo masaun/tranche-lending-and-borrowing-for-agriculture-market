@@ -117,11 +117,15 @@ describe("Scenario test (Tranche lending ~ borrowing)", function () {
     })
 
     it("Whole scenario test (AAVE flow tests - yield and price movements)", async function () {
+
+        console.log(`Wallet: ${ Wallet }`)
+
+
         const priceInitial = await tranchePool.callStatic.price();
         console.log(`priceInitial: ${ priceInitial }`)
 
         await buyTokens(Wallet[0], 100_000 * 10 ** 6);
-        const gotJtokens1 = await tranchePool.callStatic.balanceOf(await Wallet[0].getAddress());
+        const gotJtokens1 = await tranchePool.callStatic.balanceOf(await Wallet[0].getAddress())  // [Error]: at the argument of "Wallet[0]"
         console.log(`gotJtokens1: ${ gotJtokens1 }`)
 
         //await moveTimeWindowAndUpdate();
