@@ -60,7 +60,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         //const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
         console.log('=== deadline ===', deadline)
 
-        let transaction = await tranchePool.connect(deployerSign).buyBond(underlyingAmount, minTokens, deadline)
+        let transaction = await tranchePool.connect(deployerSign).buyTokens(underlyingAmount, minTokens, deadline)
         let txReceipt = await transaction.wait()
     }
 
@@ -144,24 +144,33 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         const priceAfterJtokens = await tranchePool.callStatic.price()
         console.log(`priceAfterJtokens: ${ priceAfterJtokens }`)
 
-        await buyBond(DEPLOYER, 100_000 * 10 ** 6, 3);
+
+        //@dev - Buy a senior bond
+        const tokenAmount1 = 100_000 * 10 ** 6
+        const maxMaturesAt1 = 3
+        await buyBond(tokenAmount1, maxMaturesAt1);
 
         const bond1 = await tranchePool.seniorBonds(1);
         const abond1 = await tranchePool.abond();
 
-        //await moveTimeWindowAndUpdate();
+        //await moveTimeWindowAndUpdate()
 
-        await buyBond(DEPLOYER, 100_000 * 10 ** 6, 1);
+        // const principalAmount
+        // const minGain
+        // const deadline
+        // const forDays_ 
+        await buyBond(100_000 * 10 ** 6, 1);
         const bond2 = await tranchePool.seniorBonds(2);
+
 
         //await moveTimeWindowAndUpdate();
 
         const priceAfter2Bonds = await tranchePool.callStatic.price();
         expect(priceAfter2Bonds.gt(priceAfterJtokens), 'price increases after 2 bonds').equal(true);
 
-        await sellTokens(DEPLOYER, 50_000 * 10 ** 6);
+        await sellTokens(50_000 * 10 ** 6);
 
-        await buyJuniorBond(DEPLOYER, gotJtokens1.sub(50_000 * 10 ** 6), TIME_IN_FUTURE);
+        await buyJuniorBond(gotJtokens1.sub(50_000 * 10 ** 6), TIME_IN_FUTURE);
 
         for (let f = 0; f < 24 * 3; f++) {
           await moveTimeWindowAndUpdate();
