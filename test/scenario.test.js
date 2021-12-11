@@ -60,7 +60,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         //const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
         console.log('=== deadline ===', deadline)
 
-        let transaction = await tranchePool.connect(deployerSign).buyTokens(underlyingAmount, minTokens, deadline)
+        let transaction = await tranchePool.connect(deployerSign).buyTokens(underlyingAmount, minTokens, deadline)  /// [Error]: Transaction reverted: function call to a non-contract account
         let txReceipt = await transaction.wait()
     }
 
@@ -133,8 +133,8 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         console.log(`deadline_: ${ deadline_ } , type: ${ typeof deadline_ }`)
 
         //@dev - Buy junior tokens
-        await buyTokens(underlyingAmount_, minTokens_, deadline_)
-        const gotJtokens1 = await tranchePool.callStatic.balanceOf(DEPLOYER)  // [Error]: at the argument of "Wallet[0]"
+        await buyTokens(underlyingAmount_, minTokens_, deadline_)  /// [Error]: Transaction reverted: function call to a non-contract account
+        const gotJtokens1 = await tranchePool.callStatic.balanceOf(DEPLOYER)
         console.log(`gotJtokens1: ${ gotJtokens1 }`)
 
         //await moveTimeWindowAndUpdate();
@@ -144,21 +144,18 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         const priceAfterJtokens = await tranchePool.callStatic.price()
         console.log(`priceAfterJtokens: ${ priceAfterJtokens }`)
 
-
         //@dev - Buy a senior bond
-        const tokenAmount1 = 100_000 * 10 ** 6
-        const maxMaturesAt1 = 3
-        await buyBond(tokenAmount1, maxMaturesAt1);
+        const principalAmount = String(ethers.utils.parseEther('1'))  /// 1 DAI
+        const minGain = String(ethers.utils.parseEther('0.1'))        /// 0.1 DAI
+        const deadline = await currentTimestamp() + A_HOUR
+        const forDays = 7                                             /// 7 days == 1 week
+        await buyBond(principalAmount, minGain, deadline, forDays)    /// [Error]: Transaction reverted: function call to a non-contract account
 
         const bond1 = await tranchePool.seniorBonds(1);
         const abond1 = await tranchePool.abond();
 
         //await moveTimeWindowAndUpdate()
 
-        // const principalAmount
-        // const minGain
-        // const deadline
-        // const forDays_ 
         await buyBond(100_000 * 10 ** 6, 1);
         const bond2 = await tranchePool.seniorBonds(2);
 
