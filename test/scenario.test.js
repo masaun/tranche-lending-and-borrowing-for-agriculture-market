@@ -59,7 +59,10 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         //const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
         console.log(`deadline: ${ deadline }`)
 
+        //@dev - Execution test
         //let transaction = await tranchePool.connect(deployerSign).setController("0x718E3ea0B8C2911C5e54Cb4b9B2075fdd87B55a7")  // [Result]: Success
+        
+        //@dev - Execution of buyTokens() method
         let transaction = await tranchePool.connect(deployerSign).buyTokens(underlyingAmount, minTokens, deadline)  /// [Error]: Transaction reverted: function call to a non-contract account
         let txReceipt = await transaction.wait()
         console.log(`txReceipt: ${ JSON.stringify(txReceipt, null, 2) }`)
