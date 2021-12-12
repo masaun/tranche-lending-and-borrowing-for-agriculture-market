@@ -1,4 +1,15 @@
-# Tranche Lending for farmers👩‍🌾🌽
+# Tranche Lending and Borrowing platform for farmers👩‍🌾🌽  (※ NOTE: This repos is still in progress)
+## 【Overview】
+- This is a smart contract that: 
+  - allow farmers to borrow money with fixed-rate.
+  - allow lenders (investors) to lend money with fixed-rate. 
+
+<br>
+
+- This smart contract can provide features above by utilizing tranche scheme.
+
+
+<br>
 
 ## 【Test】
 - Senario test
