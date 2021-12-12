@@ -37,7 +37,6 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
     let POOL
     let UNDERLYING
 
-
     async function currentTimestamp() {
         const date = new Date()
         const a = date.getTime()
@@ -58,10 +57,12 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
         const minTokens = minTokens_                           // e.g). 1
         const deadline = deadline_
         //const deadline = await currentTimestamp() + A_HOUR   // Unit: Seconds
-        console.log('=== deadline ===', deadline)
+        console.log(`deadline: ${ deadline }`)
 
+        //let transaction = await tranchePool.connect(deployerSign).setController("0x718E3ea0B8C2911C5e54Cb4b9B2075fdd87B55a7")  // [Result]: Success
         let transaction = await tranchePool.connect(deployerSign).buyTokens(underlyingAmount, minTokens, deadline)  /// [Error]: Transaction reverted: function call to a non-contract account
         let txReceipt = await transaction.wait()
+        console.log(`txReceipt: ${ JSON.stringify(txReceipt, null, 2) }`)
     }
 
     async function buyBond(principalAmount_, minGain_, deadline_, forDays_) {
@@ -87,7 +88,7 @@ describe("Scenario test (Tranche lending ~ borrowing)", async function () {
 
     it("Check currentBlock", async function () {
         const _currentBlock = await currentBlock()
-        //console.log(`currentBlock: ${ JSON.stringify(_currentBlock) }`)
+        //console.log(`currentBlock: ${ JSON.stringify(_currentBlock, null, 2) }`)
     })
 
     it("Assign deployer's sign and wallet address", async function () {
