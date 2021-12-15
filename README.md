@@ -1,4 +1,4 @@
-# Tranche lending and borrowing smart contract for farmers👩‍🌾🌽  (※ NOTE: This repos is still in progress)
+# Tranche lending and borrowing smart contract for agriculture market👩‍🌾🌽  (※ NOTE: This repos is still in progress)
 ## 【Overview】
 - There is a problem in agriculture sector (especially, in developing countries) that it's difficult for small farmers to access financial product (such as borrowing money for their business). Even if they can access financial product, they often need to repay extremely high interest rates. (include the case of traditional micro finance). 
 
