@@ -86,32 +86,32 @@ contract TranchePool is JuniorToken, ITranchePool, BondStorages, BondEvents {
      * @dev - A lender deposit (=lend) stablecoins (e.g. DAI, USDC, USDT) into existing lending protocols (e.g. AAVE, Compound)
      * @dev - Yield is generated through existing lending protocols (e.g. AAVE, Compound)
      */
-    function deposit(address asset, uint amount, address onBehalfOf, uint16 referralCode) public {
-        //@dev - Create stablecoin instance (asset deposited are DAI, USDC, USDT, etc
-        IERC20 stablecoin = IERC20(asset);
+    // function deposit(address asset, uint amount, address onBehalfOf, uint16 referralCode) public {
+    //     //@dev - Create stablecoin instance (asset deposited are DAI, USDC, USDT, etc
+    //     IERC20 stablecoin = IERC20(asset);
 
-        //@notice - In advance, a user must approve "amount" 
-        stablecoin.transferFrom(msg.sender, address(this), amount);
+    //     //@notice - In advance, a user must approve "amount" 
+    //     stablecoin.transferFrom(msg.sender, address(this), amount);
 
-        //@dev - Deposit amount of tokens into AAVE's lending pool
-        address onBehalfOf = address(0);
-        uint16 referralCode = 0;
-        lendingPool.deposit(asset, amount, onBehalfOf, referralCode);
-    }
+    //     //@dev - Deposit amount of tokens into AAVE's lending pool
+    //     address onBehalfOf = address(0);
+    //     uint16 referralCode = 0;
+    //     lendingPool.deposit(asset, amount, onBehalfOf, referralCode);
+    // }
 
     /**
      * @dev - Harvest yields that is generated via existing lending protocols (e.g. AAVE, Compound)
      */ 
-    function harvestYieldGenerated() public {
-        // [Todo]:
-    }
+    // function harvestYieldGenerated() public {
+    //     // [Todo]:
+    // }
 
     /**
      * @dev - Allocate yields generated into each pools of tranches (Senior tranche's pool / Junior tranche's pool)
      */ 
-    function allocateYieldGenerated() public {
-        // [Todo]:
-    }
+    // function allocateYieldGenerated() public {
+    //     // [Todo]:
+    // }
 
     /**
      * @dev - A farmer borrow specified-amount from this pool
