@@ -1,11 +1,11 @@
-# Tranche lending and borrowing smart contract for farmers👩‍🌾🌽  (※ NOTE: This repos is still in progress)
+# Tranche lending and borrowing smart contract for agriculture market👩‍🌾🌽  (※ NOTE: This repos is still in progress)
 ## 【Overview】
-- There is a problem in agriculture sector in developing countries that it's difficult for small farmers to access financial product (such as borrowing money for their business). Even if they can access financial product, they often face that is forced to repay with high interest rate (such as traditional micro finance). 
+- There is a problem in agriculture sector (especially, in developing countries) that it's difficult for small farmers to access financial product (such as borrowing money for their business). Even if they can access financial product, they often need to repay extremely high interest rates. (include the case of traditional micro finance). 
 
 - This is a smart contract that: 
-  - allow farmers to borrow money with `lower interest rate` by eliminating middle man.
-  - allow farmers to borrow money with `fixed-interest rate` by tranche scheme.
-  - allow lenders (investors) to choose a option that lend money with `fixed-interest rate` by tranche scheme.
+  - allow `farmers` (borrowers) to borrow money with `lower interest rate` by eliminating middle man.
+  - allow `farmers` (borrowers) to borrow money with `fixed-interest rate` by tranche scheme.
+  - allow `investors` (lenders) to choose a option that lend money with `fixed-interest rate` by tranche scheme.
 
 <br>
 
@@ -48,10 +48,7 @@ npm install
 
 <br>
 
-
-<br>
-
-## 【Test】
+## 【Test】(※ In progress)
 - Senario test
 ```
 npm run test:Scenario
@@ -68,6 +65,6 @@ npm run test:Scenario
 <br>
 
 - BUIDL IT
-  - 🌽Agriculture related Project
-    - Build a decentralised trade financing app with a focus on robust lending mechanism for agriculture👩‍🌾🌽  
+  - Agriculture related Project
+    - Build a decentralised trade financing app with a focus on robust lending mechanism for agriculture.  
       https://buidlit.devfolio.co/#prizes
