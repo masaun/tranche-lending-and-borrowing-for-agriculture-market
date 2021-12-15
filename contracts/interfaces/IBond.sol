@@ -6,7 +6,6 @@ import { IERC721 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 interface IBond is IERC721 {
     function tranchePool() external view returns (address);
-    //function smartYield() external view returns (address);
 
     function mint(address to, uint256 tokenId) external;
 

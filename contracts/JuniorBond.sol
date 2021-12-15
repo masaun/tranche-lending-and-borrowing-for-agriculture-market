@@ -12,18 +12,15 @@ import { IBond } from "./interfaces/IBond.sol";
 contract JuniorBond is IBond, ERC721 {
 
     address public override tranchePool;
-    //address public override smartYield;
 
     constructor(
         address tranchePool_,
-        //address smartYield_,
         string memory name_,
         string memory symbol_
     )
       ERC721(name_, symbol_)
     {
         tranchePool = tranchePool_;
-        //smartYield = smartYield_;
     }
 
     function mint(address to_, uint256 tokenId_)
