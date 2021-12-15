@@ -48,10 +48,7 @@ npm install
 
 <br>
 
-
-<br>
-
-## 【Test】
+## 【Test】(※ In progress)
 - Senario test
 ```
 npm run test:Scenario
