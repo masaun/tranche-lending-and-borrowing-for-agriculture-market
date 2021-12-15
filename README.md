@@ -1,6 +1,6 @@
 # Tranche lending and borrowing smart contract for farmers👩‍🌾🌽  (※ NOTE: This repos is still in progress)
 ## 【Overview】
-- There is a problem in agriculture sector in developing countries that it's difficult for small farmers to access financial product (such as borrowing money for their business). Even if they can access financial product, they often face that is forced to repay with high interest rate. 
+- There is a problem in agriculture sector in developing countries that it's difficult for small farmers to access financial product (such as borrowing money for their business). Even if they can access financial product, they often face that is forced to repay with high interest rate (such as traditional micro finance). 
 
 - This is a smart contract that: 
   - allow farmers to borrow money with `lower interest rate` by eliminating middle man.
@@ -15,12 +15,23 @@
 
 <br>
 
+## 【Workflow】
+- Diagram of entire workflow
+  ![diagram_tranche-lending-and-borrowing-smart-contract-for-farmers](https://user-images.githubusercontent.com/19357502/146112578-bd07745b-6a69-494b-a270-88c031e26cbb.jpeg)
+
+<br>
+
+- NOTE: 
+  - Repaid amount is calculated based on BorrowTokens that farmer has.
+
+<br>
+
 ## 【Technical Stack】
 - Solidity (Solc): v0.7.6
 - Hardhat: v2.6.1
 - ethers.js: v5.5.1
 - openzeppelin-solidity: v3.4.0
-
+- Node.js: v16.7.0
 
 <br>
 
