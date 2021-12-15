@@ -9,20 +9,20 @@
 
 <br>
 
-- Lenders (investors) can choose options either `junior tranche (bond)` or `senior tranche (bond)` .
-  - If they choose a senior tranche (bond), their fund deposited are protected. 
-  - If they choose a junior tranche (bond), their fund deposited are not protected. Instead, they can get higher interest rate.
+- Lenders (investors) can choose options either `junior bond tranche` or `senior bond tranche` .
+  - If they choose a senior bond tranche, their principle fund deposited are protected. 
+  - If they choose a junior bond tranche, their principle fund deposited are not protected. Instead, they can get higher interest rate.
 
 <br>
 
 ## 【Workflow】
 - Diagram of entire workflow
-  ![diagram_tranche-lending-and-borrowing-smart-contract-for-farmers](https://user-images.githubusercontent.com/19357502/146112578-bd07745b-6a69-494b-a270-88c031e26cbb.jpeg)
+  ![diagram_tranche-lending-and-borrowing-smart-contract-for-farmers](https://user-images.githubusercontent.com/19357502/146214707-7c929853-81d1-41a6-8548-bdb931918b51.jpeg)
 
 <br>
 
 - NOTE: 
-  - Repaid amount is calculated based on BorrowTokens that farmer has.
+  - Repaid amount is calculated based on BorrowTokens that a farmer has.
 
 <br>
 
