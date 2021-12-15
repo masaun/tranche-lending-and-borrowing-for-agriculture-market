@@ -9,19 +9,24 @@
 
 <br>
 
-- Lenders (investors) can choose options either `junior bond tranche` or `senior bond tranche` .
-  - If they choose a senior bond tranche, their principle fund deposited are protected. 
-  - If they choose a junior bond tranche, their principle fund deposited are not protected. Instead, they can get higher interest rate.
+- Lenders (investors) can choose options either `junior bonds` or `senior bonds` .
+  - If they buy senior bonds, they can receive interests based on the fixed-rate. In addition to that, their principle funds deposited are protected. 
+  - If they buy junior bonds, their principle funds deposited are not protected. Instead, they can get higher interest rate. (※ That interest rate is the variable-rate)
 
 <br>
 
 ## 【Workflow】
-- Diagram of entire workflow
+- [Diagram of entire workflow]
   ![diagram_tranche-lending-and-borrowing-smart-contract-for-farmers](https://user-images.githubusercontent.com/19357502/146214707-7c929853-81d1-41a6-8548-bdb931918b51.jpeg)
 
 <br>
 
-- NOTE: 
+- [How to keep `fixed-rate` for lenders who bought `senior bonds` if interest rate of AAVE goes down]: 
+  - If the interest rate of AAVE-v2 is more going down than the fixed-rate that was set, the TranchePool contract maintain the fixed-rate by applying funds pooled that are accumulated by which JuniorTokens are bought.
+
+<br>
+
+- [NOTE]: 
   - Repaid amount is calculated based on BorrowTokens that a farmer has.
 
 <br>
