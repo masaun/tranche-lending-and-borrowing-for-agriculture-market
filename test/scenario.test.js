@@ -21,6 +21,9 @@ const A_DAY = 24 * A_HOUR
  */ 
 describe("Scenario test (Tranche lending ~ borrowing)", async function () {
 
+    //@dev - Check ethers.js version used in this test
+    console.log(ethers.version)
+
     //@dev - deployer's signature
     let deployerSign
 

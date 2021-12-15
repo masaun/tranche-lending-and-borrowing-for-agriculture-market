@@ -8,6 +8,25 @@
 
 - This smart contract can provide features above by utilizing tranche scheme.
 
+<br>
+
+## 【Technical Stack】
+- Solidity (Solc): v0.7.6
+- Hardhat: v2.6.1
+- ethers.js: v5.5.1
+- openzeppelin-solidity: v3.4.0
+
+
+<br>
+
+## 【Installation】
+- ① Install NPM modules
+```
+npm install
+```
+
+<br>
+
 
 <br>
 
