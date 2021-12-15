@@ -21,6 +21,11 @@
 
 <br>
 
+- NOTE: 
+  - Repaid amount is calculated based on BorrowTokens that farmer has.
+
+<br>
+
 ## 【Technical Stack】
 - Solidity (Solc): v0.7.6
 - Hardhat: v2.6.1
