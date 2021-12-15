@@ -1,5 +1,5 @@
 {
-  "name": "tranche-lending-for-farmers",
+  "name": "tranche-lending-and-borrowing-for-agriculture-market",
   "scripts": {
     "accounts": "npx hardhat accounts --network hardhat",
     "test": "npx hardhat test --network hardhat",
