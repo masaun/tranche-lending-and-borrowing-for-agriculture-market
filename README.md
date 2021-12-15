@@ -15,12 +15,15 @@
 
 <br>
 
+
+<br>
+
 ## 【Technical Stack】
 - Solidity (Solc): v0.7.6
 - Hardhat: v2.6.1
 - ethers.js: v5.5.1
 - openzeppelin-solidity: v3.4.0
-
+- Node.js: v16.7.0
 
 <br>
 
